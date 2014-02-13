@@ -40,9 +40,9 @@
 // The order of precedence (highest first) for determining what the
 // value of each flag should be is:
 //
-// 1. An option on the command line.
-// 2. A value in the environment.
-// 3. The default value.
+//   1. An option on the command line.
+//   2. A value in the environment.
+//   3. The default value.
 //
 // For details on how to use flags in general, see the standard
 // packages documentation: http://golang.org/pkg/flag/.
