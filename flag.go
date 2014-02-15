@@ -44,8 +44,13 @@
 //   2. A value in the environment.
 //   3. The default value.
 //
-// For details on how to use flags in general, see the standard
-// packages documentation: http://golang.org/pkg/flag/.
+//
+// If you are worried about stepping on other environment variables,
+// you can set the EnvPrefix to something unique and eflag will look
+// for variables with the name EnvPrefix + flagname.
+//
+//  For details on how to use flags in general, see the standard
+//  packages documentation: http://golang.org/pkg/flag/.
 package eflag
 
 import (
@@ -57,6 +62,10 @@ import (
 	"strconv"
 	"time"
 )
+
+// EnvPrefix is the prefix to use when looking for environmental
+// variables.
+var EnvPrefix = ""
 
 // ErrHelp is the error returned if the flag -help is invoked but no such flag is defined.
 var ErrHelp = errors.New("flag: help requested")
@@ -773,9 +782,10 @@ func (f *FlagSet) parseOne() (bool, error) {
 func (f *FlagSet) Parse(arguments []string) error {
 	f.parsed = true
 	f.args = arguments
-	// Consult the environment for possible updates before parsing the command line.
+	// Consult the environment for possible updates before parsing the
+	// command line.
 	for _, flag := range f.formal {
-		if env := os.Getenv(flag.Name); env != "" {
+		if env := os.Getenv(EnvPrefix + flag.Name); env != "" {
 			if err := flag.Value.Set(env); err != nil {
 				return f.failf("invalid value in environment in %q for -%s: %v",
 					flag.Value, flag.Name, err)

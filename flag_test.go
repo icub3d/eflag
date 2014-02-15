@@ -283,11 +283,13 @@ func testParseWithEnv(f *FlagSet, t *testing.T) {
 
 func TestParseWithEnv(t *testing.T) {
 	ResetForTesting(func() { t.Error("bad parse") })
-	os.Setenv("uint", "11")
-	os.Setenv("uint64", "30")
+	EnvPrefix = "test_"
+	os.Setenv("test_uint", "11")
+	os.Setenv("test_uint64", "30")
 	testParseWithEnv(CommandLine, t)
-	os.Setenv("uint", "")
-	os.Setenv("uint64", "")
+	os.Setenv("test_uint", "")
+	os.Setenv("test_uint64", "")
+	EnvPrefix = ""
 }
 func TestParse(t *testing.T) {
 	ResetForTesting(func() { t.Error("bad parse") })
